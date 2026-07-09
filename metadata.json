@@ -1,0 +1,8 @@
+{
+  "name": "Remix: MS Billing System",
+  "description": "A premium, cloud-synchronized corporate billing software featuring a secure authentication system, real-time client accounts database, dynamic products catalog and custom invoices generator with payment-aging analytics.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
