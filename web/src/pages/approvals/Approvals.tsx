@@ -44,27 +44,13 @@ export default function Approvals() {
     queryFn: () => api.get(`/approvals/queue?type=${type}&status=${status}`),
   });
 
-  const decide = async () => {
+  const decide = async (decision: 'approved' | 'rejected') => {
     if (!deciding) return;
     try {
       await api.post(`/approvals/${deciding.type === 'leave' ? 'leave' : deciding.type === 'concession' ? 'concessions' : 'refunds'}/${deciding.id}/decision`, {
-        decision: status === 'pending' ? 'approved' : 'approved',
-        notes: notes || null,
+        decision, notes: notes || null,
       });
-      show('Approved', 'success');
-      setDeciding(null);
-      setNotes('');
-      qc.invalidateQueries({ queryKey: ['approvals-queue'] });
-    } catch (e) { show((e as ApiError).message, 'error'); }
-  };
-
-  const reject = async () => {
-    if (!deciding) return;
-    try {
-      await api.post(`/approvals/${deciding.type === 'leave' ? 'leave' : deciding.type === 'concession' ? 'concessions' : 'refunds'}/${deciding.id}/decision`, {
-        decision: 'rejected', notes: notes || null,
-      });
-      show('Rejected', 'success');
+      show(decision === 'approved' ? 'Approved' : 'Rejected', 'success');
       setDeciding(null);
       setNotes('');
       qc.invalidateQueries({ queryKey: ['approvals-queue'] });
@@ -168,8 +154,8 @@ export default function Approvals() {
           </FormField>
           <div className="flex justify-end gap-2 pt-2 border-t border-slate-100">
             <Button variant="secondary" onClick={() => setDeciding(null)}>Cancel</Button>
-            <Button variant="danger" onClick={reject}><X className="w-4 h-4" /> Reject</Button>
-            <Button onClick={decide}><Check className="w-4 h-4" /> Approve</Button>
+            <Button variant="danger" onClick={() => decide('rejected')}><X className="w-4 h-4" /> Reject</Button>
+            <Button onClick={() => decide('approved')}><Check className="w-4 h-4" /> Approve</Button>
           </div>
         </div>
       </Modal>
