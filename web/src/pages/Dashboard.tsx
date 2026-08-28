@@ -3,7 +3,7 @@ import {
   ResponsiveContainer, LineChart, Line, XAxis, YAxis, Tooltip, CartesianGrid,
   BarChart, Bar, Legend,
 } from 'recharts';
-import { Users, Wallet, AlertCircle, GraduationCap } from 'lucide-react';
+import { Users, Wallet, AlertCircle, GraduationCap, CalendarDays } from 'lucide-react';
 import { api } from '../lib/api';
 import { Card, PageHeader, Stat, Badge, useToasts } from '../components/ui';
 import { formatMoney } from '../lib/format';
@@ -22,6 +22,13 @@ export default function Dashboard() {
   const { data, refetch, isLoading } = useQuery<Summary>({
     queryKey: ['dashboard-summary'],
     queryFn: () => api.get('/dashboard/summary'),
+  });
+
+  interface TodayFeed { today: string; events: Array<{ id: string; title: string; start_date: string; is_holiday: number; audience: string }>; holidays: Array<{ id: string; name: string; date: string; type: string }> }
+  const { data: todayFeed } = useQuery<TodayFeed>({
+    queryKey: ['calendar-today'],
+    queryFn: () => api.get('/calendar/today'),
+    refetchInterval: 60_000,
   });
 
   useSse((event, payload) => {
@@ -115,6 +122,33 @@ export default function Dashboard() {
                   <div className="text-sm text-slate-800 truncate">{e.message}</div>
                   <div className="text-xs text-slate-400">{e.source} · {new Date(e.created_at).toLocaleString()}</div>
                 </div>
+              </li>
+            ))}
+          </ul>
+        </Card>
+
+        <Card className="p-5">
+          <div className="flex items-center justify-between mb-3">
+            <div className="flex items-center gap-2">
+              <CalendarDays className="w-4 h-4 text-blue-600" />
+              <span className="font-semibold text-slate-900">Today</span>
+            </div>
+            <span className="text-xs text-slate-500">{todayFeed?.today ?? '—'}</span>
+          </div>
+          {(todayFeed?.holidays?.length ?? 0) === 0 && (todayFeed?.events?.length ?? 0) === 0 && (
+            <div className="text-sm text-slate-400">No events or holidays today.</div>
+          )}
+          <ul className="space-y-2">
+            {todayFeed?.holidays?.map((h) => (
+              <li key={h.id} className="flex items-start gap-2">
+                <Badge variant="danger">Holiday</Badge>
+                <div className="text-sm">{h.name} <span className="text-xs text-slate-500">({h.type})</span></div>
+              </li>
+            ))}
+            {todayFeed?.events?.map((e) => (
+              <li key={e.id} className="flex items-start gap-2">
+                <Badge variant={e.is_holiday === 1 ? 'danger' : 'info'}>{e.is_holiday === 1 ? 'Holiday' : 'Event'}</Badge>
+                <div className="text-sm">{e.title} {e.audience !== 'all' && <span className="text-xs text-slate-500">· {e.audience}</span>}</div>
               </li>
             ))}
           </ul>
