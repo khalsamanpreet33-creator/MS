@@ -42,6 +42,9 @@ import libraryRoutes from './library.routes.js';
 import inventoryRoutes from './inventory.routes.js';
 import assetsRoutes from './assets.routes.js';
 import reportsRoutes from './reports.routes.js';
+import calendarRoutes from './calendar.routes.js';
+import resultsRoutes from './results.routes.js';
+import approvalsRoutes from './approvals.routes.js';
 import { audit } from '../middleware/audit.js';
 import { stubRouter } from './_stub.routes.js';
 
@@ -99,6 +102,9 @@ router.use('/library', libraryRoutes);
 router.use('/inventory', inventoryRoutes);
 router.use('/assets', assetsRoutes);
 router.use('/reports', reportsRoutes);
+router.use('/calendar', calendarRoutes);
+router.use('/results', resultsRoutes);
+router.use('/approvals', approvalsRoutes);
 
 // ---------------------------------------------------------------------------
 // Phase 2+ module stubs — all wired so the SPA can navigate.
@@ -111,7 +117,7 @@ const stubs = [
   ['homework', '/homework'], // overridden by homeworkRoutes above
   ['timetable', '/timetable'], // overridden by timetableRoutes above
   ['exams', '/exams'], // overridden by examsRoutes above
-  ['results', '/results'],
+  ['results', '/results'], // overridden by resultsRoutes above
   ['accounts', '/accounts'], // overridden by accountsRoutes above
   ['payroll', '/payroll'], // overridden by payrollRoutes above
   ['hr', '/hr'], // overridden by hrRoutes above
@@ -131,8 +137,8 @@ const stubs = [
   ['notifications', '/notifications'],
   ['system-health', '/system-health'],
   ['tasks', '/tasks'], // overridden by tasksRoutes above
-  ['approvals', '/approvals'],
-  ['calendar', '/calendar'],
+  ['approvals', '/approvals'], // overridden by approvalsRoutes above
+  ['calendar', '/calendar'], // overridden by calendarRoutes above
   ['notice-board', '/notice-board'], // overridden by noticesRoutes above
   ['emergency', '/emergency'], // overridden by emergencyRoutes above
   ['bulk-comm', '/bulk-comm'], // overridden by bulkCommRoutes above

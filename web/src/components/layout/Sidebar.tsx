@@ -30,7 +30,7 @@ const NAV: NavItem[] = [
   { to: '/timetable', label: 'Timetable', icon: Calendar, group: 'Academic Management' },
   { to: '/homework', label: 'Homework', icon: ClipboardList, group: 'Academic Management' },
   { to: '/exams', label: 'Exams', icon: GraduationCap, group: 'Academic Management' },
-  { to: '/results', label: 'Results', icon: FileText, group: 'Academic Management', soon: true },
+  { to: '/results', label: 'Results', icon: FileText, group: 'Academic Management' },
   { to: '/academics', label: 'Subjects & Syllabus', icon: BookOpen, group: 'Academic Management', soon: true },
   { to: '/question-papers', label: 'Question Papers', icon: FileText, group: 'Academic Management', soon: true },
 
@@ -61,12 +61,12 @@ const NAV: NavItem[] = [
   { to: '/bulk-comm', label: 'Bulk Communication', icon: Send, group: 'Communication' },
   { to: '/emergency', label: 'Emergency Alerts', icon: AlertTriangle, group: 'Communication' },
   { to: '/notifications', label: 'Notifications', icon: Bell, group: 'Communication' },
-  { to: '/calendar', label: 'Calendar', icon: Calendar, group: 'Communication', soon: true },
+  { to: '/calendar', label: 'Calendar', icon: Calendar, group: 'Communication' },
 
   // Admin
   { to: '/system-health', label: 'System Health', icon: HeartPulse, group: 'Admin', soon: true },
   { to: '/tasks', label: 'Tasks', icon: ListChecks, group: 'Admin' },
-  { to: '/approvals', label: 'Approval Centre', icon: ShieldCheck, group: 'Admin', soon: true },
+  { to: '/approvals', label: 'Approval Centre', icon: ShieldCheck, group: 'Admin' },
   { to: '/backup', label: 'Backup & Restore', icon: Database, group: 'Admin', soon: true },
   { to: '/settings', label: 'Settings', icon: Settings, group: 'Admin', soon: true },
 ];

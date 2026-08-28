@@ -48,13 +48,16 @@ const Library = lazy(() => import('./pages/library/Library'));
 const Inventory = lazy(() => import('./pages/inventory/Inventory'));
 const Assets = lazy(() => import('./pages/assets/Assets'));
 const Reports = lazy(() => import('./pages/reports/Reports'));
+const Calendar = lazy(() => import('./pages/calendar/Calendar'));
+const Results = lazy(() => import('./pages/results/Results'));
+const Approvals = lazy(() => import('./pages/approvals/Approvals'));
 const ModuleStub = lazy(() => import('./pages/stubs/ModuleStub'));
 
 const STUB_ROUTES: { path: string; name: string; phase?: string; description?: string; features?: string[] }[] = [
   { path: '/admissions', name: 'Admissions', phase: 'Phase 2', features: ['Inquiry capture', 'Application workflow', 'Document checklist', 'Entrance test scoring'] },
   { path: '/parents', name: 'Parents Portal', phase: 'Phase 2', features: ['Parent profile', 'Linked students', 'Communication log'] },
   { path: '/exams', name: 'Exams', phase: 'Phase 2', features: ['Exam schedule', 'Marks entry', 'Grade scales'] },
-  { path: '/results', name: 'Results & Report Cards', phase: 'Phase 2', features: ['Mark sheets', 'Report card PDFs', 'Publish'] },
+  { path: '/results', name: 'Results & Report Cards', phase: 'Phase 2', features: ['Mark sheets', 'Report card PDFs', 'Publish'] }, // overridden by Results above
   { path: '/question-papers', name: 'Question Papers', phase: 'Phase 2', features: ['Question bank', 'Paper generator'] },
   { path: '/accounts', name: 'Accounts', phase: 'Phase 3', features: ['Chart of accounts', 'Journal entries', 'Trial balance', 'P&L', 'Balance sheet'] },
   { path: '/payroll', name: 'Payroll', phase: 'Phase 3', features: ['Salary structures', 'Payslips', 'TDS'] },
@@ -69,9 +72,9 @@ const STUB_ROUTES: { path: string; name: string; phase?: string; description?: s
   { path: '/certificates', name: 'Certificates', phase: 'Phase 4', features: ['Templates', 'Generation', 'Bulk print'] },
   { path: '/question-papers', name: 'Question Papers', phase: 'Phase 4', features: ['Question bank', 'Paper generator'] },
   { path: '/reports', name: 'Reports', phase: 'Phase 4', features: ['Attendance reports', 'Fee reports', 'Custom report builder'] }, // overridden by Reports above
-  { path: '/calendar', name: 'Central Calendar', phase: 'Phase 5', features: ['School calendar', 'Department filtering'] },
+  { path: '/calendar', name: 'Central Calendar', phase: 'Phase 5', features: ['School calendar', 'Department filtering'] }, // overridden by Calendar above
   { path: '/tasks', name: 'Tasks & Follow-ups', phase: 'Phase 4', features: ['Personal/team tasks', 'Due dates', 'Assignment', 'Status'] },
-  { path: '/approvals', name: 'Approval Centre', phase: 'Phase 5', features: ['Leave approvals', 'Fee concession', 'Refunds'] },
+  { path: '/approvals', name: 'Approval Centre', phase: 'Phase 5', features: ['Leave approvals', 'Fee concession', 'Refunds'] }, // overridden by Approvals above
   { path: '/audit', name: 'Audit Log', phase: 'Phase 5', features: ['User actions', 'Filters', 'CSV export'] },
 ];
 
@@ -140,6 +143,9 @@ export default function App() {
             <Route path="/inventory" element={<Inventory />} />
             <Route path="/assets" element={<Assets />} />
             <Route path="/reports" element={<Reports />} />
+            <Route path="/calendar" element={<Calendar />} />
+            <Route path="/results" element={<Results />} />
+            <Route path="/approvals" element={<Approvals />} />
 
             {STUB_ROUTES.map((r) => (
               <Route
