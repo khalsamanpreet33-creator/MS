@@ -7,6 +7,14 @@ coverage/
 .env*
 !.env.example
 
+# School ERP runtime artefacts
+server/data/
+server/server/data/
+school-data/
+backups/
+server/dist/
+.codeam/
+
 # Beads / Dolt files (added by bd init)
 .dolt/
 *.db
