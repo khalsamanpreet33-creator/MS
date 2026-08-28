@@ -44,7 +44,14 @@ export default function Results() {
     queryKey: ['subjects-list'], queryFn: () => api.get('/subjects'),
   });
   const { data: terms = { items: [] as Term[] } } = useQuery<{ items: Term[] }>({
-    queryKey: ['exam-terms'], queryFn: () => api.get('/exams/terms').catch(() => ({ items: [] })),
+    queryKey: ['exam-terms'],
+    queryFn: async () => {
+      try {
+        return await api.get<{ items: Term[] }>('/exams/terms');
+      } catch {
+        return { items: [] as Term[] };
+      }
+    },
   });
 
   const filteredExams = exams.items.filter((e) => !classId || e.class_id === classId);
@@ -88,9 +95,15 @@ export default function Results() {
   const { data: studentsList = { items: [] as Student[] } } = useQuery<{ items: Student[] }>({
     queryKey: ['students-list'], queryFn: () => api.get('/students?limit=100'),
   });
-  const { data: report } = useQuery({
+  interface ReportCard {
+    student: { id: string; admission_no: string; first_name: string; last_name: string };
+    term: { id: string; name: string };
+    items: Array<{ exam_id: string; exam_name: string; subject_name: string; max_marks: number; marks_obtained: number | null; is_absent: number; percentage: number | null; grade: string | null }>;
+    summary: { total: number; max: number; percentage: number; grade: string; subjects: number };
+  }
+  const { data: report } = useQuery<ReportCard>({
     queryKey: ['report-card', reportStudent, reportTerm],
-    queryFn: () => api.get(`/results/report-card?student_id=${reportStudent}&term_id=${reportTerm}`),
+    queryFn: () => api.get<ReportCard>(`/results/report-card?student_id=${reportStudent}&term_id=${reportTerm}`),
     enabled: !!reportStudent && !!reportTerm,
   });
 

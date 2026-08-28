@@ -31,8 +31,8 @@ const NAV: NavItem[] = [
   { to: '/homework', label: 'Homework', icon: ClipboardList, group: 'Academic Management' },
   { to: '/exams', label: 'Exams', icon: GraduationCap, group: 'Academic Management' },
   { to: '/results', label: 'Results', icon: FileText, group: 'Academic Management' },
-  { to: '/academics', label: 'Subjects & Syllabus', icon: BookOpen, group: 'Academic Management', soon: true },
-  { to: '/question-papers', label: 'Question Papers', icon: FileText, group: 'Academic Management', soon: true },
+  { to: '/academics', label: 'Subjects & Syllabus', icon: BookOpen, group: 'Academic Management' },
+  { to: '/question-papers', label: 'Question Papers', icon: FileText, group: 'Academic Management' },
 
   // Finance
   { to: '/fees', label: 'Fees', icon: Wallet, group: 'Finance' },
@@ -64,11 +64,11 @@ const NAV: NavItem[] = [
   { to: '/calendar', label: 'Calendar', icon: Calendar, group: 'Communication' },
 
   // Admin
-  { to: '/system-health', label: 'System Health', icon: HeartPulse, group: 'Admin', soon: true },
+  { to: '/system-health', label: 'System Health', icon: HeartPulse, group: 'Admin' },
   { to: '/tasks', label: 'Tasks', icon: ListChecks, group: 'Admin' },
   { to: '/approvals', label: 'Approval Centre', icon: ShieldCheck, group: 'Admin' },
-  { to: '/backup', label: 'Backup & Restore', icon: Database, group: 'Admin', soon: true },
-  { to: '/settings', label: 'Settings', icon: Settings, group: 'Admin', soon: true },
+  { to: '/backup', label: 'Backup & Restore', icon: Database, group: 'Admin' },
+  { to: '/settings', label: 'Settings', icon: Settings, group: 'Admin' },
 ];
 
 const GROUP_ORDER = [

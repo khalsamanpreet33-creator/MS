@@ -1,10 +1,10 @@
 import { useState } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { Check, X, ShieldCheck, Filter, Plus } from 'lucide-react';
+import { Check, X, Filter } from 'lucide-react';
 import { api, ApiError } from '../../lib/api';
 import {
   PageHeader, Card, Button, Select, Table, Badge,
-  useToasts, EmptyState, Modal, FormField, Input, Textarea,
+  useToasts, EmptyState, Modal, FormField, Textarea,
 } from '../../components/ui';
 import { useAuthStore } from '../../store/auth';
 import { formatDateTime, formatMoney } from '../../lib/format';
