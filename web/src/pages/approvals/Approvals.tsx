@@ -1,10 +1,10 @@
 import { useState } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { Check, X, Filter } from 'lucide-react';
+import { Check, X, Filter, Plus } from 'lucide-react';
 import { api, ApiError } from '../../lib/api';
 import {
   PageHeader, Card, Button, Select, Table, Badge,
-  useToasts, EmptyState, Modal, FormField, Textarea,
+  useToasts, EmptyState, Modal, FormField, Input, Textarea,
 } from '../../components/ui';
 import { useAuthStore } from '../../store/auth';
 import { formatDateTime, formatMoney } from '../../lib/format';
@@ -71,12 +71,38 @@ export default function Approvals() {
     } catch (e) { show((e as ApiError).message, 'error'); }
   };
 
+  // New concession request
+  const [conOpen, setConOpen] = useState(false);
+  const [conForm, setConForm] = useState({
+    student_id: '', reason: '', concession_type: 'percentage' as 'percentage' | 'fixed',
+    concession_value: 0, valid_from: new Date().toISOString().slice(0, 10), valid_to: '',
+  });
+  const { data: studentsList = { items: [] as Array<{ id: string; admission_no: string; first_name: string; last_name: string }> } } = useQuery<{ items: Array<{ id: string; admission_no: string; first_name: string; last_name: string }> }>({
+    queryKey: ['students-for-approvals'],
+    queryFn: () => api.get<{ items: Array<{ id: string; admission_no: string; first_name: string; last_name: string }> }>('/students?limit=100'),
+    enabled: conOpen,
+  });
+  const submitConcession = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      await api.post('/approvals/concessions', {
+        ...conForm,
+        valid_to: conForm.valid_to || null,
+      });
+      show('Concession requested — pending approval', 'success');
+      setConOpen(false);
+      setConForm({ student_id: '', reason: '', concession_type: 'percentage', concession_value: 0, valid_from: new Date().toISOString().slice(0, 10), valid_to: '' });
+      qc.invalidateQueries({ queryKey: ['approvals-queue'] });
+    } catch (e) { show((e as ApiError).message, 'error'); }
+  };
+
   return (
     <div>
       {node}
       <PageHeader
         title="Approval Centre"
         description={`${data.items.length} item(s)`}
+        actions={canWrite && <Button variant="secondary" onClick={() => setConOpen(true)}><Plus className="w-4 h-4" /> New Concession Request</Button>}
       />
 
       <Card className="mb-4">
@@ -146,6 +172,41 @@ export default function Approvals() {
             <Button onClick={decide}><Check className="w-4 h-4" /> Approve</Button>
           </div>
         </div>
+      </Modal>
+
+      <Modal open={conOpen} onClose={() => setConOpen(false)} title="New Fee Concession Request" size="lg">
+        <form onSubmit={submitConcession} className="space-y-3">
+          <FormField label="Student" required>
+            <Select value={conForm.student_id} onChange={(e) => setConForm({ ...conForm, student_id: e.target.value })} required>
+              <option value="">Select student...</option>
+              {studentsList.items.map((s) => <option key={s.id} value={s.id}>{s.admission_no} — {s.first_name} {s.last_name}</option>)}
+            </Select>
+          </FormField>
+          <FormField label="Reason" required>
+            <Input value={conForm.reason} onChange={(e) => setConForm({ ...conForm, reason: e.target.value })} required maxLength={500} placeholder="e.g. Sibling discount, merit scholarship..." />
+          </FormField>
+          <div className="grid grid-cols-3 gap-3">
+            <FormField label="Type">
+              <Select value={conForm.concession_type} onChange={(e) => setConForm({ ...conForm, concession_type: e.target.value as 'percentage' | 'fixed' })}>
+                <option value="percentage">Percentage</option>
+                <option value="fixed">Fixed ₹</option>
+              </Select>
+            </FormField>
+            <FormField label="Value" required>
+              <Input type="number" min={0} step="0.01" value={conForm.concession_value} onChange={(e) => setConForm({ ...conForm, concession_value: Number(e.target.value) })} required />
+            </FormField>
+            <FormField label="Valid From" required>
+              <Input type="date" value={conForm.valid_from} onChange={(e) => setConForm({ ...conForm, valid_from: e.target.value })} required />
+            </FormField>
+          </div>
+          <FormField label="Valid To" hint="Leave blank for open-ended">
+            <Input type="date" value={conForm.valid_to} onChange={(e) => setConForm({ ...conForm, valid_to: e.target.value })} />
+          </FormField>
+          <div className="flex justify-end gap-2 pt-2 border-t border-slate-100">
+            <Button type="button" variant="secondary" onClick={() => setConOpen(false)}>Cancel</Button>
+            <Button type="submit">Submit Request</Button>
+          </div>
+        </form>
       </Modal>
     </div>
   );
